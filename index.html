@@ -78,7 +78,6 @@
   .meta { margin-top: clamp(40px, 6vw, 88px); font-size: 14px; row-gap: 20px; }
   .meta > div { border-top: 2px solid var(--line); padding-top: 10px; }
   .meta .m1 { grid-column: 3 / 7; }
-  .meta .m2 { grid-column: 7 / 11; }
   .meta > div > span { display: block; }
   .meta .lbl { color: var(--muted); }
 
@@ -132,7 +131,7 @@
   @media (max-width: 680px) {
     nav a { display: none; }
     .hero-idx { display: none; }
-    .name, .meta .m1, .meta .m2,
+    .name, .meta .m1,
     .sec-head, .sec-body,
     footer .f1, footer .f2, footer .f3 { grid-column: 1 / -1; }
     footer .f3 { text-align: left; }
@@ -174,7 +173,6 @@
       </div>
       <div class="grid meta">
         <div class="m1"><span class="lbl" data-i18n="meta_role"></span><span data-i18n="meta_uni"></span></div>
-        <div class="m2"><span class="lbl" data-i18n="meta_base"></span><span data-i18n="meta_city"></span></div>
       </div>
     </div>
   </section>
@@ -251,8 +249,6 @@ const CONTENT = {
     nav_contact: "Kontakt",
     meta_role: "Student",
     meta_uni: "Technische Universität München",
-    meta_base: "Standort",
-    meta_city: "München, Deutschland",
     about_label: "Über mich",
     about_lead: "Ich studiere Informatik (M.Sc.) an der TUM und forsche zu AI Safety und Legal AI.",
     about_p1: "In einer Welt voller KI möchte ich untersuchen, wie sie unser Leben beeinflusst und wie wir sie sicher und fair machen können. Ich will tiefer in die Verbindung von KI und Sicherheit einsteigen und mehr über Computerhardware lernen.",
@@ -282,8 +278,6 @@ const CONTENT = {
     nav_contact: "Contact",
     meta_role: "Student",
     meta_uni: "Technical University of Munich",
-    meta_base: "Based in",
-    meta_city: "Munich, Germany",
     about_label: "About",
     about_lead: "I study Informatics (M.Sc.) at TUM and do research in AI safety and legal AI.",
     about_p1: "In a world full of AI, I want to study how it influences our lives and how we can make it safe and fair. I want to go deeper into the connection between AI and security and learn more about computer hardware.",
