@@ -1,5 +1,384 @@
 <!DOCTYPE html>
 <html lang="de">
-<head><meta charset="UTF-8"><title>Hallo</title></head>
-<body><h1>Hallo, ich bin Macher 👋</h1><p>Hier entsteht meine Website.</p></body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mauricio Neubecker</title>
+<meta name="description" content="Mauricio Neubecker – Informatik-Student (M.Sc.) an der TUM, Forschung zu AI Safety und Legal AI.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23E30613'/></svg>">
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #111111;
+    --muted: #6b6b6b;
+    --line: #111111;
+    --hair: #e3e3e3;
+    --red: #e30613;
+    --font: "Helvetica Neue", Helvetica, Arial, "Nimbus Sans", "Liberation Sans", sans-serif;
+    --pad: clamp(20px, 4vw, 56px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d0d0d;
+      --fg: #f2f2f2;
+      --muted: #9a9a9a;
+      --line: #f2f2f2;
+      --hair: #2a2a2a;
+      --red: #ff2a2a;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font);
+    font-size: 17px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--red); color: #fff; }
+
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 0 var(--pad); }
+  .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; }
+  .idx { color: var(--red); font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; }
+
+  /* Header */
+  header { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--hair); }
+  .bar { display: flex; justify-content: space-between; align-items: center; height: 64px; font-size: 14px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.02em; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--red); }
+  nav { display: flex; align-items: center; gap: 28px; }
+  nav a { transition: color .15s; }
+  nav a:hover { color: var(--red); }
+  .lang { display: flex; border: 1.5px solid var(--fg); }
+  .lang button {
+    font: inherit; font-size: 12px; font-weight: 700;
+    background: none; color: var(--fg);
+    border: 0; padding: 4px 9px; cursor: pointer;
+  }
+  .lang button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+
+  /* Hero */
+  .hero { position: relative; padding: clamp(56px, 9vw, 128px) 0 clamp(40px, 6vw, 80px); overflow: hidden; }
+  .circle {
+    position: absolute; z-index: 0;
+    right: var(--pad); top: clamp(36px, 5vw, 72px);
+    width: clamp(90px, 17vw, 240px); aspect-ratio: 1;
+    border-radius: 50%; background: var(--red);
+  }
+  .hero .grid { position: relative; z-index: 1; }
+  .hero-idx { grid-column: 1 / 3; padding-top: 1.2em; }
+  .name {
+    grid-column: 3 / 13;
+    font-size: clamp(56px, 11.5vw, 168px);
+    font-weight: 700; line-height: 0.88; letter-spacing: -0.055em;
+  }
+  .meta { margin-top: clamp(40px, 6vw, 88px); font-size: 14px; row-gap: 20px; }
+  .meta > div { border-top: 2px solid var(--line); padding-top: 10px; }
+  .meta .m1 { grid-column: 3 / 7; }
+  .meta .m2 { grid-column: 7 / 11; }
+  .meta > div > span { display: block; }
+  .meta .lbl { color: var(--muted); }
+
+  /* Sections */
+  .sec { padding-bottom: clamp(64px, 9vw, 128px); }
+  .sec-grid { border-top: 2px solid var(--line); padding-top: 22px; }
+  .sec-head { grid-column: 1 / 4; display: flex; gap: 14px; align-items: baseline; }
+  .sec-head h2 { font-size: 14px; font-weight: 700; }
+  .sec-body { grid-column: 4 / 13; }
+
+  .lead { font-size: clamp(26px, 3.3vw, 46px); line-height: 1.1; letter-spacing: -0.025em; font-weight: 500; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 36px; color: var(--muted); }
+
+  .rows { list-style: none; border-top: 1px solid var(--line); }
+  .row {
+    display: grid; align-items: baseline; gap: 16px;
+    grid-template-columns: 40px minmax(0, 1.1fr) minmax(0, 2fr) 56px 20px;
+    padding: 20px 0; border-bottom: 1px solid var(--hair);
+  }
+  .row .n, .row .y { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .row .y { text-align: right; }
+  .row .t { font-size: 21px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.2; transition: color .15s; -webkit-hyphens: auto; hyphens: auto; overflow-wrap: break-word; }
+  .row .d { color: var(--muted); }
+  .row .a { color: var(--red); font-weight: 700; transition: transform .2s; }
+  a.row:hover .t { color: var(--red); }
+  a.row:hover .a { transform: translateX(5px); }
+
+  .cv .row { grid-template-columns: 160px minmax(0, 1.4fr) minmax(0, 1fr); }
+  .cv .row .n { font-size: 14px; color: var(--fg); font-weight: 700; }
+
+  .contact-lead { color: var(--muted); max-width: 46ch; margin-bottom: 28px; }
+  .mail {
+    display: inline-block;
+    font-size: clamp(30px, 5.6vw, 84px); font-weight: 700; letter-spacing: -0.045em; line-height: 1;
+    border-bottom: 4px solid var(--fg); padding-bottom: 6px;
+    transition: color .15s, border-color .15s;
+    overflow-wrap: anywhere;
+  }
+  .mail:hover { color: var(--red); border-color: var(--red); }
+  .socials { display: flex; flex-wrap: wrap; gap: 12px 32px; margin-top: 40px; font-weight: 700; }
+  .socials a:hover { color: var(--red); }
+
+  footer .wrap { border-top: 2px solid var(--line); padding-top: 18px; padding-bottom: 40px; }
+  footer .grid { font-size: 13px; row-gap: 8px; }
+  footer .f1 { grid-column: 1 / 5; }
+  footer .f2 { grid-column: 5 / 10; color: var(--muted); }
+  footer .f3 { grid-column: 10 / 13; text-align: right; }
+  footer a:hover { color: var(--red); }
+
+  /* Mobile */
+  @media (max-width: 680px) {
+    nav a { display: none; }
+    .hero-idx { display: none; }
+    .name, .meta .m1, .meta .m2,
+    .sec-head, .sec-body,
+    footer .f1, footer .f2, footer .f3 { grid-column: 1 / -1; }
+    footer .f3 { text-align: left; }
+    .sec-head { margin-bottom: 24px; }
+    .cols { grid-template-columns: 1fr; }
+    .row { grid-template-columns: 28px minmax(0, 1fr) 20px; }
+    .row .d { grid-column: 2 / 3; grid-row: 2; }
+    .row .y { display: none; }
+    .cv .row { grid-template-columns: 1fr; gap: 4px; }
+    .cv .row .d { grid-column: auto; grid-row: auto; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a href="#top" class="logo"><span class="dot"></span>Mauricio Neubecker</a>
+    <nav>
+      <a href="#about" data-i18n="nav_about"></a>
+      <a href="#projects" data-i18n="nav_projects"></a>
+      <a href="#cv" data-i18n="nav_cv"></a>
+      <a href="#contact" data-i18n="nav_contact"></a>
+      <div class="lang" role="group" aria-label="Sprache / Language">
+        <button type="button" data-lang="de" aria-pressed="true">DE</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="circle" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="grid">
+        <div class="hero-idx idx">00</div>
+        <h1 class="name">Mauricio<br>Neubecker</h1>
+      </div>
+      <div class="grid meta">
+        <div class="m1"><span class="lbl" data-i18n="meta_role"></span><span data-i18n="meta_uni"></span></div>
+        <div class="m2"><span class="lbl" data-i18n="meta_base"></span><span data-i18n="meta_city"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="sec">
+    <div class="wrap grid sec-grid">
+      <div class="sec-head"><span class="idx">01</span><h2 data-i18n="about_label"></h2></div>
+      <div class="sec-body">
+        <p class="lead" data-i18n="about_lead"></p>
+        <div class="cols">
+          <p data-i18n="about_p1"></p>
+          <p data-i18n="about_p2"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="sec">
+    <div class="wrap grid sec-grid">
+      <div class="sec-head"><span class="idx">02</span><h2 data-i18n="projects_label"></h2></div>
+      <div class="sec-body"><ul class="rows" id="project-list"></ul></div>
+    </div>
+  </section>
+
+  <section id="cv" class="sec">
+    <div class="wrap grid sec-grid">
+      <div class="sec-head"><span class="idx">03</span><h2 data-i18n="cv_label"></h2></div>
+      <div class="sec-body"><ul class="rows cv" id="cv-list"></ul></div>
+    </div>
+  </section>
+
+  <section id="contact" class="sec">
+    <div class="wrap grid sec-grid">
+      <div class="sec-head"><span class="idx">04</span><h2 data-i18n="contact_label"></h2></div>
+      <div class="sec-body">
+        <p class="contact-lead" data-i18n="contact_lead"></p>
+        <a class="mail" id="mail-link" href="#"></a>
+        <div class="socials">
+          <a id="gh-link" href="#" target="_blank" rel="noopener">GitHub ↗</a>
+          <a id="li-link" href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="grid">
+      <div class="f1">© <span id="year"></span> Mauricio Neubecker</div>
+      <div class="f2" data-i18n="footer_note"></div>
+      <div class="f3"><a href="#top" data-i18n="footer_top"></a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   INHALT – hier bearbeiten
+   Alles in [eckigen Klammern] ist ein Platzhalter.
+   ========================================================= */
+
+const LINKS = {
+  email:    "mauricio.neubecker@tum.de",
+  github:   "https://github.com/mauricioneubecker-star",
+  linkedin: "https://www.linkedin.com/in/mauricio-neubecker-693275375"
+};
+
+const CONTENT = {
+  de: {
+    nav_about: "Über mich",
+    nav_projects: "Projekte",
+    nav_cv: "Werdegang",
+    nav_contact: "Kontakt",
+    meta_role: "Student",
+    meta_uni: "Technische Universität München",
+    meta_base: "Standort",
+    meta_city: "München, Deutschland",
+    about_label: "Über mich",
+    about_lead: "Ich studiere Informatik (M.Sc.) an der TUM und forsche zu AI Safety und Legal AI.",
+    about_p1: "In einer Welt voller KI möchte ich untersuchen, wie sie unser Leben beeinflusst und wie wir sie sicher und fair machen können. Ich will tiefer in die Verbindung von KI und Sicherheit einsteigen und mehr über Computerhardware lernen.",
+    about_p2: "Neben dem Studium mache ich Powerlifting, verbringe gerne Zeit in der Natur und engagiere mich ehrenamtlich.",
+    projects_label: "Projekte",
+    projects: [
+      { title: "AI-Safety-Forschung", desc: "Paper über sprachabhängige Werte-Inkonsistenzen in mehrsprachigen LLMs („Language-Triggered Value Inconsistencies in Multilingual LLMs“).", year: "2026", url: "https://aclanthology.org/2026.oracle-main.9/" },
+      { title: "GNN-Pipeline für Krylov-Verfahren", desc: "Ein Graph Neural Network, das für ein gegebenes lineares Gleichungssystem das beste Krylov-Unterraumverfahren und den passenden Präkonditionierer auswählt.", year: "2026", url: "https://github.com/mauricioneubecker-star/ML_pipeline" },
+      { title: "StudyPace", desc: "Persönliches Tool zur Studienplanung für Studierende, gebaut beim hackaTUM 2025. Gewinner des WildTrack-Preises.", year: "2025", url: "https://github.com/Soeky/hackatum-2025" }
+    ],
+    cv_label: "Werdegang",
+    cv: [
+      { time: "seit 2026", title: "Informatik, M.Sc.", place: "Technische Universität München" },
+      { time: "seit Okt. 2026", title: "AI Legal Research", place: "Capgemini Invent, München" },
+      { time: "Jun. 2026 – Okt. 2026", title: "Werkstudent Embedded Systems", place: "Quantum Systems, München" }
+    ],
+    contact_label: "Kontakt",
+    contact_lead: "Interesse an einem Projekt, gemeinsamer Forschung, einem Job oder einfach einem Kaffee? Schreib mir.",
+    footer_note: "Gesetzt in Helvetica. Gehostet auf GitHub Pages.",
+    footer_top: "Nach oben ↑",
+    page_description: "Mauricio Neubecker – Informatik-Student (M.Sc.) an der TUM, Forschung zu AI Safety und Legal AI."
+  },
+  en: {
+    nav_about: "About",
+    nav_projects: "Projects",
+    nav_cv: "Experience",
+    nav_contact: "Contact",
+    meta_role: "Student",
+    meta_uni: "Technical University of Munich",
+    meta_base: "Based in",
+    meta_city: "Munich, Germany",
+    about_label: "About",
+    about_lead: "I study Informatics (M.Sc.) at TUM and do research in AI safety and legal AI.",
+    about_p1: "In a world full of AI, I want to study how it influences our lives and how we can make it safe and fair. I want to go deeper into the connection between AI and security and learn more about computer hardware.",
+    about_p2: "Outside of my studies, I enjoy powerlifting, spending time in nature, and doing volunteer work.",
+    projects_label: "Projects",
+    projects: [
+      { title: "AI Safety Research", desc: "Wrote a paper on language-triggered value inconsistencies in multilingual LLMs (“Language-Triggered Value Inconsistencies in Multilingual LLMs”).", year: "2026", url: "https://aclanthology.org/2026.oracle-main.9/" },
+      { title: "GNN pipeline for Krylov methods", desc: "Built a graph neural network that selects the best Krylov subspace method and preconditioner for a given linear system.", year: "2026", url: "https://github.com/mauricioneubecker-star/ML_pipeline" },
+      { title: "StudyPace", desc: "Personal study management tool for students, built at hackaTUM 2025. Won the WildTrack prize.", year: "2025", url: "https://github.com/Soeky/hackatum-2025" }
+    ],
+    cv_label: "Experience",
+    cv: [
+      { time: "since 2026", title: "Informatics, M.Sc.", place: "Technical University of Munich" },
+      { time: "since Oct 2026", title: "AI Legal Research", place: "Capgemini Invent, Munich" },
+      { time: "Jun 2026 – Oct 2026", title: "Working Student, Embedded Systems", place: "Quantum Systems, Munich" }
+    ],
+    contact_label: "Contact",
+    contact_lead: "Interested in a project, research collaboration, a job or just a coffee? Get in touch.",
+    footer_note: "Set in Helvetica. Hosted on GitHub Pages.",
+    footer_top: "Back to top ↑",
+    page_description: "Mauricio Neubecker – Informatics student (M.Sc.) at TUM, researching AI safety and legal AI."
+  }
+};
+
+/* ========================================================= */
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function render(lang) {
+  const c = CONTENT[lang];
+  document.documentElement.lang = lang;
+  document.querySelector('meta[name="description"]').setAttribute("content", c.page_description);
+
+  document.querySelectorAll("[data-i18n]").forEach(node => {
+    const key = node.dataset.i18n;
+    if (typeof c[key] === "string") node.textContent = c[key];
+  });
+
+  const plist = document.getElementById("project-list");
+  plist.replaceChildren();
+  c.projects.forEach((p, i) => {
+    const li = document.createElement("li");
+    const url = p.url === "github" ? LINKS.github : p.url;
+    const row = el("a", "row");
+    row.href = url;
+    if (url.startsWith("http")) { row.target = "_blank"; row.rel = "noopener"; }
+    row.append(
+      el("span", "n", String(i + 1).padStart(2, "0")),
+      el("span", "t", p.title),
+      el("span", "d", p.desc),
+      el("span", "y", p.year),
+      el("span", "a", "→")
+    );
+    li.append(row);
+    plist.append(li);
+  });
+
+  const clist = document.getElementById("cv-list");
+  clist.replaceChildren();
+  c.cv.forEach(item => {
+    const li = el("li", "row");
+    li.append(el("span", "n", item.time), el("span", "t", item.title), el("span", "d", item.place));
+    clist.append(li);
+  });
+
+  document.querySelectorAll(".lang button").forEach(b => {
+    b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
+  });
+  try { localStorage.setItem("lang", lang); } catch (e) {}
+}
+
+const mail = document.getElementById("mail-link");
+mail.href = "mailto:" + LINKS.email;
+mail.textContent = LINKS.email;
+document.getElementById("gh-link").href = LINKS.github;
+document.getElementById("li-link").href = LINKS.linkedin;
+document.getElementById("year").textContent = new Date().getFullYear();
+
+document.querySelectorAll(".lang button").forEach(b => {
+  b.addEventListener("click", () => render(b.dataset.lang));
+});
+
+let startLang = "de";
+try {
+  const saved = localStorage.getItem("lang");
+  if (saved === "de" || saved === "en") startLang = saved;
+  else if (!(navigator.language || "de").toLowerCase().startsWith("de")) startLang = "en";
+} catch (e) {}
+
+render(startLang);
+</script>
+</body>
 </html>
